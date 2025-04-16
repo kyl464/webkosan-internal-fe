@@ -24,13 +24,17 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/" className="flex items-center space-x-3">
+        <a href="/home" className="flex items-center space-x-3">
           <img
             src="https://flowbite.com/docs/images/logo.svg"
             className="h-8"
             alt="Flowbite Logo"
           />
-          <span className="self-center text-2xl font-semibold text-white">
+          <span
+            className={`self-center text-2xl font-semibold transition-colors duration-300 ${
+              scrolling ? "text-black" : "text-white"
+            }`}
+          >
             Namaweb
           </span>
         </a>
@@ -41,7 +45,7 @@ const Navbar = () => {
             type="button"
             className="text-gray-600 font-semibold bg-[#EBE5C2] hover:bg-[#D6CBA8] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2"
           >
-            Get started
+            Sign Up
           </button>
         </div>
 
@@ -49,17 +53,20 @@ const Navbar = () => {
         <div className="hidden md:flex md:w-auto md:order-1">
           <ul className="flex space-x-8 font-medium">
             {[
-              { name: "Home", path: "/home" },
-              { name: "About", path: "/about" },
+              { name: "Location", path: "/location" },
+              { name: "About us", path: "/about" },
               { name: "Services", path: "/services" },
-              { name: "Contact", path: "/contact" },
             ].map((item) => (
               <li key={item.path}>
                 <a
                   href={item.path}
                   className={`block py-2 px-3 rounded-sm transition-colors duration-200 ${
                     router.pathname === item.path
-                      ? "text-[#EBE5C2] font-semibold" // Warna tulisan hitam & tebal saat aktif
+                      ? scrolling
+                        ? "text-black font-semibold"
+                        : "text-[#EBE5C2] font-semibold"
+                      : scrolling
+                      ? "text-gray-700 hover:text-black"
                       : "text-white hover:text-[#EBE5C2]"
                   }`}
                 >
