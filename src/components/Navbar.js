@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router"; // Untuk mendapatkan path halaman aktif
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Navbar = () => {
   const [scrolling, setScrolling] = useState(false);
-  const router = useRouter(); // Dapatkan path halaman saat ini
-  console.log("Current Path:", router.pathname); // Debugging
+  const router = useRouter();
+  console.log("Current Path:", router.pathname);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,7 +25,8 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/home" className="flex items-center space-x-3">
+        {/* Perbaiki Link untuk halaman Home */}
+        <Link href="/home" className="flex items-center space-x-3">
           <img
             src="https://flowbite.com/docs/images/logo.svg"
             className="h-8"
@@ -37,7 +39,7 @@ const Navbar = () => {
           >
             Namaweb
           </span>
-        </a>
+        </Link>
 
         {/* Button & Mobile Menu */}
         <div className="flex md:order-2 space-x-3 md:space-x-0">
@@ -58,7 +60,7 @@ const Navbar = () => {
               { name: "Services", path: "/services" },
             ].map((item) => (
               <li key={item.path}>
-                <a
+                <Link
                   href={item.path}
                   className={`block py-2 px-3 rounded-sm transition-colors duration-200 ${
                     router.pathname === item.path
@@ -71,7 +73,7 @@ const Navbar = () => {
                   }`}
                 >
                   {item.name}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
