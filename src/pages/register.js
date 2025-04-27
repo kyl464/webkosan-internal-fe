@@ -171,7 +171,7 @@ export default function Register() {
           </form>
 
           <p className="mt-4 text-center text-gray-500 text-sm">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/login"
               className="text-[#514D3E] font-semibold hover:underline"
