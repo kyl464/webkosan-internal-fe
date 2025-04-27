@@ -1,22 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
 const Navbar = () => {
   const [scrolling, setScrolling] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const router = useRouter();
-  console.log("Current Path:", router.pathname);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolling(window.scrollY > 50);
     };
 
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleProfileClick = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleEditProfile = () => {
+    router.push("/profile/edit"); // arahkan ke halaman edit profile
+  };
 
   return (
     <nav
@@ -25,7 +45,6 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        {/* Perbaiki Link untuk halaman Home */}
         <Link href="/home" className="flex items-center space-x-3">
           <img
             src="https://flowbite.com/docs/images/logo.svg"
@@ -41,17 +60,56 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Button & Mobile Menu */}
-        <div className="flex md:order-2 space-x-3 md:space-x-0">
-          <button
-            type="button"
-            className="text-gray-600 font-semibold bg-[#EBE5C2] hover:bg-[#D6CBA8] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2"
-          >
-            Sign Up
-          </button>
+        <div
+          className="flex md:order-2 space-x-3 md:space-x-0 relative"
+          ref={dropdownRef}
+        >
+          {session ? (
+            <>
+              <button
+                type="button"
+                onClick={handleProfileClick}
+                className="flex items-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#514D3E]"
+              >
+                <img
+                  src={
+                    session?.user?.image
+                      ? session.user.image
+                      : "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                  }
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-12 w-48 bg-white rounded-md shadow-lg overflow-hidden z-20">
+                  <button
+                    onClick={handleEditProfile}
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={() => signOut()}
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => router.push("/login")}
+              className="text-gray-600 font-semibold bg-[#EBE5C2] hover:bg-[#D6CBA8] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2"
+            >
+              Get Started
+            </button>
+          )}
         </div>
 
-        {/* Navbar Menu */}
         <div className="hidden md:flex md:w-auto md:order-1">
           <ul className="flex space-x-8 font-medium">
             {[
