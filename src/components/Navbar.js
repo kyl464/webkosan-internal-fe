@@ -14,6 +14,7 @@ const Navbar = () => {
     const handleScroll = () => {
       setScrolling(window.scrollY > 50);
     };
+    console.log("ISI SESSION DARI NAVBAR:", session);
 
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

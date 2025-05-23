@@ -4,6 +4,8 @@ import Link from "next/link";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [identifier, setIdentifier] = useState(""); // username atau email
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     getSession().then((session) => {
@@ -11,8 +13,20 @@ export default function Login() {
     });
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      identifier,
+      password,
+    });
+
+    if (result?.error) {
+      alert("Login gagal: " + result.error);
+    } else {
+      window.location.href = "/home"; // atau router.push("/home")
+    }
   };
 
   return (
@@ -67,12 +81,16 @@ export default function Login() {
               type="text"
               placeholder="Email/Username"
               className="w-full px-4 py-2 mb-4 bg-[#EBE5C2] border border-gray-400 rounded-full focus:outline-none text-gray-700 placeholder-gray-500"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
             />
             <div className="relative mb-6">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 className="w-full px-4 py-2 bg-[#EBE5C2] border border-gray-400 rounded-full focus:outline-none text-gray-700 placeholder-gray-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"

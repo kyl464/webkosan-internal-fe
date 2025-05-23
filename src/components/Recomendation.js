@@ -1,7 +1,21 @@
 // components/Recommendation.js
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Recomendation = () => {
+  const [kosanList, setKosanList] = useState([]);
+
+  useEffect(() => {
+    const fetchKosan = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/api/kosan");
+        setKosanList(res.data);
+      } catch (error) {
+        console.error("Gagal ambil data kosan:", error);
+      }
+    };
+    fetchKosan();
+  }, []);
   return (
     <section className=" py-6">
       <div className="container mx-auto px-4 border border-black rounded-lg mt-18 pb-6 pt-6">
@@ -188,66 +202,36 @@ const Recomendation = () => {
 
         {/* Tempat untuk Cards */}
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <div class="max-w-sm bg-transparent border border-gray-400 rounded-lg shadow-sm ">
-            <a href="#">
-              <img
-                class="rounded-t-lg"
-                src="https://watermark.lovepik.com/photo/20211208/large/lovepik-bedroom-model-room-sample-room-picture_501599837.jpg"
-                alt=""
-              />
-            </a>
-            <div class="p-5">
+          {kosanList.map((kosan) => (
+            <div
+              key={kosan._id}
+              className="max-w-sm bg-transparent border border-gray-400 rounded-lg shadow-sm"
+            >
               <a href="#">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                  Lorem Ipsum
-                </h5>
+                <img
+                  className="rounded-t-lg"
+                  src={
+                    kosan.foto?.[0] ||
+                    "https://via.placeholder.com/400x200.png?text=No+Image"
+                  }
+                  alt={kosan.nama}
+                />
               </a>
-              <p class="mb-3 font-normal text-gray-700">
-                Here are the biggest enterprise technology acquisitions of 2021
-                so far, in reverse chronological order.
-              </p>
+              <div className="p-5">
+                <a href="#">
+                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+                    {kosan.nama}
+                  </h5>
+                </a>
+                <p className="mb-3 font-normal text-gray-700">
+                  {kosan.deskripsi}
+                </p>
+                <p className="text-sm font-semibold text-gray-800">
+                  Harga: Rp {kosan.harga.toLocaleString("id-ID")}
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="max-w-sm bg-transparent border border-gray-400 rounded-lg shadow-sm ">
-            <a href="#">
-              <img
-                class="rounded-t-lg"
-                src="https://watermark.lovepik.com/photo/20211208/large/lovepik-bedroom-model-room-sample-room-picture_501599837.jpg"
-                alt=""
-              />
-            </a>
-            <div class="p-5">
-              <a href="#">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                  Lorem Ipsum
-                </h5>
-              </a>
-              <p class="mb-3 font-normal text-gray-700">
-                Here are the biggest enterprise technology acquisitions of 2021
-                so far, in reverse chronological order.
-              </p>
-            </div>
-          </div>
-          <div class="max-w-sm bg-transparent border border-gray-400 rounded-lg shadow-sm ">
-            <a href="#">
-              <img
-                class="rounded-t-lg"
-                src="https://watermark.lovepik.com/photo/20211208/large/lovepik-bedroom-model-room-sample-room-picture_501599837.jpg"
-                alt=""
-              />
-            </a>
-            <div class="p-5">
-              <a href="#">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                  Lorem Ipsum
-                </h5>
-              </a>
-              <p class="mb-3 font-normal text-gray-700">
-                Here are the biggest enterprise technology acquisitions of 2021
-                so far, in reverse chronological order.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* Tombol Lihat Semua */}

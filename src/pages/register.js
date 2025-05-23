@@ -5,6 +5,10 @@ import Link from "next/link";
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     getSession().then((session) => {
@@ -12,8 +16,29 @@ export default function Register() {
     });
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Ambil langsung dari state (bukan dari e.target[0])
+    try {
+      const res = await fetch("http://localhost:3000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password, confirmPassword }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        alert(result.error || "Registrasi gagal");
+      } else {
+        alert("Registrasi berhasil!");
+        window.location.href = "/login";
+      }
+    } catch (err) {
+      alert("Terjadi kesalahan jaringan");
+      console.error(err);
+    }
   };
 
   return (
@@ -68,17 +93,23 @@ export default function Register() {
               type="text"
               placeholder="Username"
               className="w-full px-4 py-2 mb-4 bg-[#EBE5C2] border border-gray-400 rounded-full focus:outline-none text-gray-700 placeholder-gray-500"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <input
               type="text"
               placeholder="Email"
               className="w-full px-4 py-2 mb-4 bg-[#EBE5C2] border border-gray-400 rounded-full focus:outline-none text-gray-700 placeholder-gray-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <div className="relative mb-4">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 className="w-full px-4 py-2 bg-[#EBE5C2] border border-gray-400 rounded-full focus:outline-none text-gray-700 placeholder-gray-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"
@@ -145,6 +176,8 @@ export default function Register() {
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
                 className="w-full px-4 py-2 bg-[#EBE5C2] border border-gray-400 rounded-full focus:outline-none text-gray-700 placeholder-gray-500"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
               <button
                 type="button"
