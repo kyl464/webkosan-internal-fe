@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-
+import Image from "next/image";
 const Navbar = () => {
   const [scrolling, setScrolling] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -29,7 +29,7 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [session]);
 
   const handleProfileClick = () => {
     setDropdownOpen(!dropdownOpen);
@@ -47,17 +47,20 @@ const Navbar = () => {
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link href="/home" className="flex items-center space-x-3">
-          <img
+          <Image
             src="https://flowbite.com/docs/images/logo.svg"
-            className="h-8"
-            alt="Flowbite Logo"
+            alt="Flowbite
+          Logo"
+            width={32}
+            height={32}
+            className="h-8 w-auto"
           />
           <span
             className={`self-center text-2xl font-semibold transition-colors duration-300 ${
               scrolling ? "text-black" : "text-white"
             }`}
           >
-            B'Stay
+            B&apos;Stay
           </span>
         </Link>
 
@@ -72,13 +75,11 @@ const Navbar = () => {
                 onClick={handleProfileClick}
                 className="flex items-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#514D3E]"
               >
-                <img
-                  src={
-                    session?.user?.image
-                      ? session.user.image
-                      : "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-                  }
+                <Image
+                  src={session.user?.image || "..."}
                   alt="Profile"
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full object-cover"
                 />
               </button>
