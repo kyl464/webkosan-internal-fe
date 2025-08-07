@@ -17,10 +17,13 @@ export const authOptions = {
       },
       async authorize(credentials) {
         try {
-          const res = await axios.post("http://localhost:5000/api/auth/login", {
-            identifier: credentials.identifier,
-            password: credentials.password,
-          });
+          const res = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/logins`,
+            {
+              identifier: credentials.identifier,
+              password: credentials.password,
+            }
+          );
           console.log("Authorize user:", res.data.user);
           if (res.data && res.data.user) {
             return res.data.user;
