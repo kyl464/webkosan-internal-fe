@@ -21,14 +21,16 @@ export const authOptions = {
             identifier: credentials.identifier,
             password: credentials.password,
           });
-
-          console.log("USER DARI BACKEND:", res.data.user); 
-
-          if (res.data?.user) {
+          console.log("Authorize user:", res.data.user);
+          if (res.data && res.data.user) {
             return res.data.user;
           }
           return null;
         } catch (error) {
+          console.error(
+            "Authorize error:",
+            error.response?.data || error.message
+          );
           return null;
         }
       },
@@ -42,14 +44,22 @@ export const authOptions = {
     strategy: "jwt",
   },
 
-
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.user = user;
+      if (user) {
+        console.log("JWT callback user:", user);
+        token.user = user;
+      } else {
+        console.log("JWT callback token.user:", token.user);
+      }
       return token;
     },
     async session({ session, token }) {
-      if (token?.user) session.user = token.user;
+      console.log("SESSION callback token.user:", token.user);
+      if (token?.user) {
+        session.user = token.user;
+        if (!session.user.image) session.user.image = "/default-profile.png";
+      }
       return session;
     },
   },

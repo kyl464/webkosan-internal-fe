@@ -8,7 +8,7 @@ const Recomendation = () => {
   useEffect(() => {
     const fetchKosan = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/kosan");
+        const res = await axios.get("http://localhost:5000/api/kosan");
         setKosanList(res.data);
       } catch (error) {
         console.error("Gagal ambil data kosan:", error);

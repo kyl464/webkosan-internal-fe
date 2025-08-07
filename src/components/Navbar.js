@@ -14,7 +14,7 @@ const Navbar = () => {
     const handleScroll = () => {
       setScrolling(window.scrollY > 50);
     };
-    console.log("ISI SESSION DARI NAVBAR:", session);
+    console.log("SESSION USER:", session?.user);
 
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -57,7 +57,7 @@ const Navbar = () => {
               scrolling ? "text-black" : "text-white"
             }`}
           >
-            Namaweb
+            B'Stay
           </span>
         </Link>
 

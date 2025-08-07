@@ -25,6 +25,7 @@ export default function Login() {
     if (result?.error) {
       alert("Login gagal: " + result.error);
     } else {
+      await new Promise((r) => setTimeout(r, 500));
       window.location.href = "/home"; // atau router.push("/home")
     }
   };
