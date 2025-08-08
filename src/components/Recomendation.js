@@ -9,7 +9,7 @@ const Recomendation = () => {
     const fetchKosan = async () => {
       try {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/kosan`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/kosan`
         );
         setKosanList(res.data);
       } catch (error) {
